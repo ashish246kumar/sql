@@ -82,4 +82,14 @@ WITH CTE AS (
 SELECT *, 
     CASE WHEN transaction_dt = '9999-12-12 23:59:59' THEN 1 ELSE 0 END AS isActive  
 FROM CTE;
-*******************************
+**********************************************************
+find the running sum of order price for every customer
+************************************************************************
+WITH CTE AS (
+    SELECT customerId, itemId, quantity, price, (quantity * price) AS total_price
+    FROM customerOrder
+)
+SELECT customerId, itemId, quantity, price, total_price, 
+       SUM(total_price) OVER(PARTITION BY customerId ORDER BY itemId) AS runningPrice
+FROM CTE;
+
