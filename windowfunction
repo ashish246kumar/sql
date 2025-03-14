@@ -127,5 +127,11 @@ SELECT *,
         ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS LastMonthPrice
 FROM itemprice;
 *********************************
+Fill Missing Null Values
+*********************************************
+with CTE as(
+select * ,count(DeptId) over(order by StudentId) as cnt_deptId from studentdetail)
+select *,first_value(DeptId) over(partition by cnt_deptId order by studentId) as new_deptId from CTE;
+***********
 
 
