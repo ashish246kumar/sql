@@ -68,5 +68,18 @@ SELECT *, (sales_qty - prev_sales) AS diff_sales_qty FROM CTE;
 
 *************
 
-
+Find the active transaction for each user with transaction start & end time for each indivisual transaction
 ********************
+WITH CTE AS (
+    SELECT *,
+        TransactionDate AS TransStartDttm,
+        COALESCE(
+            DATE_ADD(SECONDS, -1, LEAD(TransactionDate) OVER (PARTITION BY user_id ORDER BY transaction_dt)), 
+            '9999-12-12 23:59:59'
+        ) AS transactiondtm 
+    FROM transaction
+)
+SELECT *, 
+    CASE WHEN transaction_dt = '9999-12-12 23:59:59' THEN 1 ELSE 0 END AS isActive  
+FROM CTE;
+*******************************
