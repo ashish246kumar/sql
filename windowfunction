@@ -105,3 +105,27 @@ SELECT customerId, itemId, quantity, price, total_price,
        SUM(total_price) OVER(PARTITION BY customerId ORDER BY itemId ROWS BETWEEN CURRENT ROW AND 1 FOLLOWING
 ) AS runningPrice
 FROM CTE;
+***********
+WITH CTE AS (
+    SELECT customerId, itemId, quantity, price, orderDate, 
+           (quantity * price) AS total_price
+    FROM customerOrder
+)
+SELECT customerId, itemId, quantity, price, orderDate, total_price, 
+       SUM(total_price) OVER(
+           PARTITION BY customerId 
+           ORDER BY orderDate 
+           RANGE BETWEEN INTERVAL '3' MONTH PRECEDING AND CURRENT ROW
+       ) AS runningPrice
+FROM CTE;
+***************
+"For each item, retrieve the first and last recorded price based on the month number."
+
+SELECT *,
+    FIRST_VALUE(Price) OVER (PARTITION BY ItemId ORDER BY month_no) AS FirstPrice,
+    LAST_VALUE(Price) OVER (PARTITION BY ItemId ORDER BY month_no 
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS LastMonthPrice
+FROM itemprice;
+*********************************
+
+
