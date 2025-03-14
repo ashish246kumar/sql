@@ -100,3 +100,8 @@ WITH CTE AS (
 SELECT customerId, itemId, quantity, price, total_price, 
        SUM(total_price) OVER(PARTITION BY customerId ORDER BY itemId ROWS 1 PRECEDING) AS runningPrice
 FROM CTE;
+************
+SELECT customerId, itemId, quantity, price, total_price, 
+       SUM(total_price) OVER(PARTITION BY customerId ORDER BY itemId ROWS BETWEEN CURRENT ROW AND 1 FOLLOWING
+) AS runningPrice
+FROM CTE;
