@@ -28,3 +28,28 @@ FROM CTE
 GROUP BY grp
 ORDER BY DATEDIFF(MAX(End_Date), MIN(Start_Date)), MIN(Start_Date);
 **********************
+"Write a SQL query to generate all possible matchups between teams from the TEAMS table. Each team should be paired with every other team exactly once, and a team should not be matched with itself."
+
+
+WITH CTE AS (
+    SELECT 
+        Team_Name, 
+        ROW_NUMBER() OVER(ORDER BY Team_Name) AS RN
+    FROM TEAMS
+)
+SELECT 
+    T1.Team_Name AS TEAM, 
+    T2.Team_Name AS OPPONENT_TEAM 
+FROM CTE T1
+INNER JOIN CTE T2
+ON T1.RN < T2.RN;
+*********************************************
+WITH CTE AS (
+    SELECT *, 
+           RANK() OVER (PARTITION BY dept ORDER BY marks DESC) AS fifth_column,
+           DENSE_RANK() OVER (PARTITION BY dept ORDER BY marks DESC) AS sixth_column
+    FROM Students
+)
+SELECT * FROM CTE;
+
+********************
