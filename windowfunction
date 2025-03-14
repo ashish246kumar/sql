@@ -54,5 +54,19 @@ WITH CTE AS (
 )
 SELECT * FROM CTE;
 ***********
+This query calculates the difference in sales quantity (sales_qty) between the current and previous months for each product.
+
+
+The second parameter of the LAG() function in SQL specifies the offset, meaning how many rows before the current row should be retrieved.
+
+WITH CTE AS (
+    SELECT *,
+           LAG(sales_qty, 1, sales_qty) OVER (PARTITION BY product_id ORDER BY month_number) AS prev_sales  
+    FROM sales
+)
+SELECT *, (sales_qty - prev_sales) AS diff_sales_qty FROM CTE;
+
+*************
+
 
 ********************
