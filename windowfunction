@@ -44,6 +44,8 @@ FROM CTE T1
 INNER JOIN CTE T2
 ON T1.RN < T2.RN;
 *********************************************
+Write an SQL query to assign ranks to students within each department (dept) based on their marks in descending order. Use both RANK() and DENSE_RANK() window functions to compare their behavior
+*************************************************************
 WITH CTE AS (
     SELECT *, 
            RANK() OVER (PARTITION BY dept ORDER BY marks DESC) AS fifth_column,
@@ -51,5 +53,6 @@ WITH CTE AS (
     FROM Students
 )
 SELECT * FROM CTE;
+***********
 
 ********************
