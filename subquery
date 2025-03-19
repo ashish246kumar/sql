@@ -5,3 +5,16 @@ FROM orders
 GROUP BY order_date
 HAVING SUM(amount) > (SELECT MAX(amount) FROM orders o WHERE o.order_date = orders.order_date) + 1000.00;
 **************
+Write a query to extract all data from the customer table if and only if one or more of the customers in the customer table are located in  London.
+
+-- Selecting 'customer_id', 'cust_name', and 'city' from the 'customer' table
+SELECT customer_id, cust_name, city
+-- Specifying the table to retrieve data from ('customer')
+FROM customer
+-- Filtering the results based on the existence of records in a subquery
+WHERE EXISTS
+   -- Subquery: Selecting any record from the 'customer' table where 'city' is 'London'
+   (SELECT *
+    FROM customer 
+    WHERE city='London');
+************************
