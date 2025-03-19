@@ -1,0 +1,7 @@
+Write a query to find the sums of the amounts from the orders table, grouped by date, and eliminate all dates where the sum was not at least 1000.00 above the maximum order amount for that date.
+
+SELECT order_date, SUM(amount) AS total_amount
+FROM orders
+GROUP BY order_date
+HAVING SUM(amount) > (SELECT MAX(amount) FROM orders o WHERE o.order_date = orders.order_date) + 1000.00;
+**************
